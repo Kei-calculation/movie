@@ -1,0 +1,45 @@
+At impressions show
+<h1>感想</h1>
+<h3>感想詳細</h3>
+
+<div class="impression">
+<p><%= @impression.title %></p>
+<p><%= @impression.body %></p>
+<h2>評価：
+<span class="star-rating">
+<span class="star-rating-front" style="width: <%= getPercent(@impression.overall) %>%;">★★★★★</span>
+<span class="star-rating-back">★★★★★</span>
+</span> 
+</h2>
+</div>
+<p><%= @impression.created_at %></p>
+
+
+
+<% if user_signed_in? %>
+    <% if current_user.already_liked?(@impression) %>
+        <%= link_to impression_like_path(@impression), method: :delete do %>
+            <i class="fas fa-heart"></i><%= @impression.likes.count %>
+        <% end %>
+    <% else %>
+        <%= link_to impression_likes_path(@impression), method: :post do %>
+            <i class="fas fa-heart"></i><%= @impression.likes.count %>
+
+        <% end %>
+    <% end %>
+<% else %>
+    <i class="fas fa-heart"></i><%= @impression.likes.count %>
+
+<% end %>
+
+
+</div>
+
+<h2>いいねしたユーザー</h2>
+<% @impression.liked_users.each do |user| %>
+<li><%= user.email %></li>
+<% end %>
+<%= link_to "編集する", edit_impression_path(@impression.id) %>
+</div>
+
+<%= link_to "感想一覧に戻る", impressions_path %>
